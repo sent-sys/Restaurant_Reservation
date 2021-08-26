@@ -34,7 +34,7 @@ export default function Reserve({
   }
 
   return (
-    <main className="container mt-3">
+    <main className="container-fluid mt-3">
       <form onSubmit={submitHandler}>
         <fieldset>
           <div className="form-group">
@@ -106,8 +106,10 @@ export default function Reserve({
             <input
               type="number"
               min="1"
+              max="10"
               name="people"
               id="people"
+              placeholder="1"
               require={true}
               value={table.people}
               onChange={changeHandler}

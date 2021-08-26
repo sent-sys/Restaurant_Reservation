@@ -19,7 +19,7 @@ function resCheck(req, res, next) {
     return next({ status: 400, message: `First name is required` });
   if (!last_name || last_name == "")
     return next({ status: 400, message: `Last name is required` });
-  if (!mobile_number || mobile_number == "")
+  if (!mobile_number || (mobile_number == "" && isNaN(mobile_number)))
     return next({ status: 400, message: `Mobile number is required` });
   if (!reservation_date)
     return next({ status: 400, message: `Please select a reservation date` });

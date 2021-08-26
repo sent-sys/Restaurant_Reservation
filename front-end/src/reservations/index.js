@@ -13,6 +13,7 @@ export default function Reserve({
   },
 }) {
   const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState();
   const [table, setTable] = useState(initialState);
 
   function changeHandler({ target: { name, value } }) {
@@ -28,15 +29,22 @@ export default function Reserve({
 
   function submitHandler(event) {
     event.preventDefault();
-    createReservation(table).then(() =>
-      history.push(`/dashboard?date=${table.reservation_date}`)
-    );
+    createReservation(table)
+      .then(() => history.push(`/dashboard?date=${table.reservation_date}`))
+      .catch(setErrorMessage);
   }
 
   return (
     <main className="container-fluid mt-3">
       <form onSubmit={submitHandler}>
-        <fieldset>
+        <h1 className="mx-2 mt-4">Create Reservation</h1>
+        {errorMessage &&
+          errorMessage.message.map((err, i) => (
+            <p key={i} className="alert alert-danger">
+              {err}
+            </p>
+          ))}
+        <fieldset className="mt-3">
           <div className="form-group">
             <label htmlFor="first_name" className="m-2">
               First Name:
@@ -72,7 +80,7 @@ export default function Reserve({
               placeholder="000-000-0000"
               name="mobile_number"
               id="mobile_number"
-              require={true}
+              required={true}
               value={table.mobile_number}
               onChange={changeHandler}
             />
@@ -85,7 +93,7 @@ export default function Reserve({
               type="date"
               name="reservation_date"
               id="reservation_date"
-              require={true}
+              required={true}
               value={table.reservation_date}
               onChange={changeHandler}
             />
@@ -96,7 +104,7 @@ export default function Reserve({
               type="time"
               name="reservation_time"
               id="reservation_time"
-              require={true}
+              required={true}
               value={table.reservation_time}
               onChange={changeHandler}
             />
@@ -110,20 +118,20 @@ export default function Reserve({
               name="people"
               id="people"
               placeholder="1"
-              require={true}
+              required={true}
               value={table.people}
               onChange={changeHandler}
             />
           </div>
-          <button type="submit" className="btn btn-primary mr-1">
-            Submit
-          </button>
           <button
             type="button"
-            className="btn btn-danger ml-1"
+            className="btn btn-danger mx-2"
             onClick={cancel}
           >
             Cancel
+          </button>
+          <button type="submit" className="btn btn-primary mx-2">
+            Submit
           </button>
         </fieldset>
       </form>

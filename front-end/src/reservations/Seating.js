@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 export default function Seating() {
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState();
-  const [table, setTable] = useState({});
+  const [tables, setTables] = useState([]);
   const { reservation_id } = useParams();
 
   function changeHandler({ target: { name, value } }) {

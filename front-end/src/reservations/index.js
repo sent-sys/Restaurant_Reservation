@@ -14,10 +14,10 @@ export default function Reserve({
 }) {
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState();
-  const [table, setTable] = useState(initialState);
+  const [reservation, setReservation] = useState(initialState);
 
   function changeHandler({ target: { name, value } }) {
-    setTable((prevState) => ({
+    setReservation((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -29,8 +29,10 @@ export default function Reserve({
 
   function submitHandler(event) {
     event.preventDefault();
-    createReservation(table)
-      .then(() => history.push(`/dashboard?date=${table.reservation_date}`))
+    createReservation(reservation)
+      .then(() =>
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
+      )
       .catch(setErrorMessage);
   }
 
@@ -38,12 +40,16 @@ export default function Reserve({
     <main className="container-fluid mt-3">
       <form onSubmit={submitHandler}>
         <h1 className="mx-2 mt-4">Create Reservation</h1>
-        {errorMessage &&
-          errorMessage.message.map((err, i) => (
-            <p key={i} className="alert alert-danger">
-              {err}
-            </p>
-          ))}
+        {errorMessage && (
+          <div className="alert alert-danger">
+            <h4>Please fix the following errors: </h4>
+            <ul>
+              {errorMessage.message.map((err, i) => (
+                <li key={i}>{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <fieldset className="mt-3">
           <div className="form-group">
             <label htmlFor="first_name" className="m-2">
@@ -55,7 +61,7 @@ export default function Reserve({
               name="first_name"
               id="first_name"
               required={true}
-              value={table.first_name}
+              value={reservation.first_name}
               onChange={changeHandler}
             />
             <label htmlFor="last_name" className="m-2">
@@ -67,7 +73,7 @@ export default function Reserve({
               name="last_name"
               id="last_name"
               required={true}
-              value={table.last_name}
+              value={reservation.last_name}
               onChange={changeHandler}
             />
           </div>
@@ -81,7 +87,7 @@ export default function Reserve({
               name="mobile_number"
               id="mobile_number"
               required={true}
-              value={table.mobile_number}
+              value={reservation.mobile_number}
               onChange={changeHandler}
             />
           </div>
@@ -94,7 +100,7 @@ export default function Reserve({
               name="reservation_date"
               id="reservation_date"
               required={true}
-              value={table.reservation_date}
+              value={reservation.reservation_date}
               onChange={changeHandler}
             />
             <label htmlFor="reservation_time" className="m-2">
@@ -105,7 +111,7 @@ export default function Reserve({
               name="reservation_time"
               id="reservation_time"
               required={true}
-              value={table.reservation_time}
+              value={reservation.reservation_time}
               onChange={changeHandler}
             />
             <label htmlFor="people" className="m-2">
@@ -119,7 +125,7 @@ export default function Reserve({
               id="people"
               placeholder="1"
               required={true}
-              value={table.people}
+              value={reservation.people}
               onChange={changeHandler}
             />
           </div>

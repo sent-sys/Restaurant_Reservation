@@ -37,7 +37,7 @@ function resCheck(req, res, next) {
   }
   if (submitDate < today) {
     goNext = true;
-    errs.push(`Please select a valid, future date`);
+    errs.push(`Please select a valid, future date and time`);
   }
   if (submitDate.getDay() === 2) {
     goNext = true;
@@ -49,7 +49,9 @@ function resCheck(req, res, next) {
   }
   if (reservation_time < "103000") {
     goNext = true;
-    errs.push(`Restaurant does not open until 10:30`);
+    errs.push(
+      `Restaurant does not open until 10:30, please choose a time after opening`
+    );
   }
   if (reservation_time > "213000") {
     goNext = true;

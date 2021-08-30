@@ -18,6 +18,7 @@ function create(reservation) {
         reservation_date: reservation.reservation_date,
         reservation_time: reservation.reservation_time,
         people: reservation.people,
+        status: reservation.status,
       },
       "*"
     )
@@ -28,8 +29,16 @@ function read(reservation_id) {
   return knex("reservations").where({ reservation_id: reservation_id }).first();
 }
 
+function update(reservation) {
+  return knex("reservations")
+    .where({ reservation_id: reservation.reservation_id })
+    .update(reservation, "*")
+    .then((updated) => updated[0]);
+}
+
 module.exports = {
   list,
   create,
   read,
+  update,
 };

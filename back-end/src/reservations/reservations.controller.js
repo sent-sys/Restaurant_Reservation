@@ -13,6 +13,7 @@ function resCheck(req, res, next) {
       reservation_date,
       reservation_time,
       people,
+      status,
     },
   } = req.body;
   const today = Date.now();
@@ -67,8 +68,26 @@ function resCheck(req, res, next) {
     reservation_date,
     reservation_time,
     people,
+    status,
   };
-  next();
+  return next();
+}
+
+async function reservationExists(req, res, next) {
+  const reservation = await service.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({ status: 400, message: [`Reservation not found`] });
+}
+
+async function update(req, res) {
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: req.body.data.status,
+  };
+  res.json({ data: await service.update(updatedReservation) });
 }
 
 async function list(req, res) {
@@ -83,4 +102,5 @@ async function create(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [resCheck, asyncErrorBoundary(create)],
+  update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
 };

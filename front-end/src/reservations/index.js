@@ -40,7 +40,7 @@ export default function Reserve({
   return (
     <main className="container-fluid mt-3">
       <form onSubmit={submitHandler}>
-        <h1 className="mx-2 mt-4">Create Reservation</h1>
+        <h1 className="mx-2 mt-4">Create Reservation (UTC Time Zone)</h1>
         {errorMessage && (
           <div className="alert alert-danger">
             <h4>Please fix the following errors: </h4>

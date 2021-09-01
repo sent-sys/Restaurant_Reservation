@@ -90,17 +90,29 @@ async function update(req, res) {
   res.json({ data: await service.update(updatedReservation) });
 }
 
+function queryChecker(req, res, next) {
+  const { mobile_phone } = req.query;
+  if (mobile_phone) {
+    res.locals.mobile_number = mobile_phone;
+    return search(req, res);
+  } else return next();
+}
+
+async function search(req, res) {
+  res.json({ data: await service.search(res.locals.mobile_number) });
+}
+
 async function list(req, res) {
   const { date } = req.query;
   res.json({ data: await service.list(date) });
 }
 
-async function create(req, res, next) {
+async function create(req, res) {
   res.status(201).json({ data: await service.create(res.locals.reservation) });
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(queryChecker), asyncErrorBoundary(list)],
   create: [resCheck, asyncErrorBoundary(create)],
   update: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
 };

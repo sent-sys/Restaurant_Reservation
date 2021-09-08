@@ -1,8 +1,3 @@
-/**
- * Defines the router for reservation resources.
- *
- * @type {Router}
- */
 const methodNotAllowed = require("../errors/notFound");
 const router = require("express").Router();
 const controller = require("./reservations.controller");

@@ -45,19 +45,7 @@ export default function ReserveForm({ type }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let newDate = new Date(
-      `${formData.reservation_date} ${formData.reservation_time}`
-    );
-    let currentDay = new Date();
     try {
-      if (newDate.getDay() === 2)
-        throw new Error("Restaurant is closed on Tuesdays!");
-      if (newDate < currentDay) throw new Error("Fellow time traveler eh!");
-      let time = Number(formData.reservation_time.replace(":", ""));
-      if (time < 1030 || time > 2130)
-        throw new Error(
-          "Reservations are only valid from 10:30 AM to 9:30 PM."
-        );
       if (type === "Edit") {
         await updateReservation(reservation_id, { data: formData });
       } else {

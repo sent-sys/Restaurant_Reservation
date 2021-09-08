@@ -11,6 +11,7 @@ Express <br/>
 Knex <br/>
 PostgreSQL <br/>
 Bootstrap <br/>
+Trello <br/>
 
 ## Objectives
 

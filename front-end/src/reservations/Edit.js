@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useHistory } from "react-router";
-import { createReservation } from "../utils/api";
+import { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router";
+import { readReservation, editReservation } from "../utils/api";
 
-export default function Reserve({
+export default function Edit({
   initialState = {
     first_name: "",
     last_name: "",
@@ -16,11 +16,20 @@ export default function Reserve({
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState();
   const [reservation, setReservation] = useState(initialState);
+  const { reservation_id } = useParams();
+
+  useEffect(loadEdit, [reservation_id]);
+
+  function loadEdit() {
+    const abortController = new AbortController();
+    setErrorMessage(null);
+    readReservation(reservation_id, abortController.signal)
+      .then(setReservation)
+      .catch(setErrorMessage);
+    return () => abortController.abort();
+  }
 
   function changeHandler({ target: { name, value } }) {
-    if (name === "people") {
-      value = Number(value);
-    }
     setReservation((prevState) => ({
       ...prevState,
       [name]: value,
@@ -33,21 +42,23 @@ export default function Reserve({
 
   function submitHandler(event) {
     event.preventDefault();
-    createReservation(reservation)
-      .then(() =>
-        history.push(`/dashboard?date=${reservation.reservation_date}`)
-      )
+    editReservation(reservation)
+      .then(() => history.goBack())
       .catch(setErrorMessage);
   }
 
   return (
     <main className="container-fluid mt-3">
       <form onSubmit={submitHandler}>
-        <h1 className="mx-2 mt-4">Create Reservation (UTC Time Zone)</h1>
+        <h1 className="mx-2 mt-4">Edit Reservation (UTC Time Zone)</h1>
         {errorMessage && (
           <div className="alert alert-danger">
             <h4>Please fix the following errors: </h4>
-            {errorMessage.message}
+            <ul>
+              {errorMessage.message.map((err, i) => (
+                <li key={i}>{err}</li>
+              ))}
+            </ul>
           </div>
         )}
         <fieldset className="mt-3">
@@ -123,6 +134,7 @@ export default function Reserve({
               max="10"
               name="people"
               id="people"
+              placeholder="1"
               required={true}
               value={reservation.people}
               onChange={changeHandler}

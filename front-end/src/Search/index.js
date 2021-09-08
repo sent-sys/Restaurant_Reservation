@@ -46,11 +46,7 @@ export default function Search() {
         {errorMessage && (
           <div className="alert alert-danger">
             <h4>Please fix the following errors: </h4>
-            <ul>
-              {errorMessage.message.map((err, i) => (
-                <li key={i}>{err}</li>
-              ))}
-            </ul>
+            <p>{errorMessage.message}</p>
           </div>
         )}
         <fieldset className="mt-3">
@@ -147,6 +143,12 @@ export default function Search() {
                       </button>
                     </>
                   )}
+                  {res.status === "finished" && <p>{res.status}</p>}
+                  <a href={`/reservations/${res.reservation_id}/edit`}>
+                    <button type="button" className="btn btn-secondary ml-2">
+                      Edit
+                    </button>
+                  </a>
                 </div>
               </div>
               <hr />

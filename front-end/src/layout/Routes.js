@@ -6,6 +6,8 @@ import NotFound from "./NotFound";
 import Reservations from "../reservations";
 import Tables from "../Tables";
 import Seating from "../reservations/Seating";
+import Edit from "../reservations/Edit";
+import Read from "../reservations/Read";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import Search from "../Search";
@@ -38,6 +40,12 @@ function Routes() {
       </Route>
       <Route path="/reservations/:reservation_id/seat">
         <Seating />
+      </Route>
+      <Route path="/reservations/:reservation_id/edit">
+        <Edit />
+      </Route>
+      <Route path="/reservations/:reservation_id">
+        <Read />
       </Route>
       <Route path="/search">
         <Search />

@@ -32,13 +32,13 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
   }
 
-  async function handleCancel(reservation_id) {
+  function handleCancel(reservation) {
     if (
       window.confirm(
         "Do you want to cancel this reservation? \n \n \nThis cannot be undone."
       )
     ) {
-      await updateReservation(reservation_id, "cancelled");
+      updateReservation(reservation, "cancelled");
       window.location.reload();
     }
   }
@@ -109,95 +109,78 @@ function Dashboard({ date }) {
           <hr />
           {reservations.map((reservation, i) => (
             <div key={i}>
-              {reservation.status !== "finished" && (
-                <>
-                  <div className="d-flex align-items-center">
-                    <div className="col-2">
-                      <p>{reservation.first_name}</p>
-                    </div>
-                    <div className="col-2">
-                      <p>{reservation.last_name}</p>
-                    </div>
-                    <div className="col-2">
-                      <p>{reservation.mobile_number}</p>
-                    </div>
-                    <div className="col-2">
-                      <p>{reservation.reservation_time}</p>
-                    </div>
-                    <div className="col-2">
-                      <p>{reservation.people}</p>
-                    </div>
-                    <div className="col-2">
-                      {reservation.status === "booked" && (
-                        <>
-                          <p
-                            data-reservation-id-status={
-                              reservation.reservation_id
-                            }
-                          >
-                            {reservation.status}
-                          </p>
-                          <a
-                            name="seat"
-                            id="seat"
-                            href={`/reservations/${reservation.reservation_id}/seat`}
-                          >
-                            <button
-                              name="seat"
-                              id="seat"
-                              type="button"
-                              className="btn btn-primary"
-                            >
-                              Seat
-                            </button>
-                          </a>
-                        </>
-                      )}
-                      {reservation.status === "seated" && (
-                        <>
-                          <p
-                            data-reservation-id-status={
-                              reservation.reservation_id
-                            }
-                          >
-                            {reservation.status}
-                          </p>
-                          <button
-                            type="button"
-                            className="btn btn-warning"
-                            onClick={() => {
-                              if (window.confirm("Finish reservation?"))
-                                clickHandler(reservation, "finished");
-                            }}
-                          >
-                            Finish
-                          </button>
-                        </>
-                      )}
+              <div className="d-flex align-items-center">
+                <div className="col-2">
+                  <p>{reservation.first_name}</p>
+                </div>
+                <div className="col-2">
+                  <p>{reservation.last_name}</p>
+                </div>
+                <div className="col-2">
+                  <p>{reservation.mobile_number}</p>
+                </div>
+                <div className="col-2">
+                  <p>{reservation.reservation_time}</p>
+                </div>
+                <div className="col-2">
+                  <p>{reservation.people}</p>
+                </div>
+                <div className="col-2">
+                  <p data-reservation-id-status={reservation.reservation_id}>
+                    {reservation.status}
+                  </p>
+                  {reservation.status === "booked" && (
+                    <>
                       <a
-                        href={`/reservations/${reservation.reservation_id}/edit`}
+                        name="seat"
+                        id="seat"
+                        href={`/reservations/${reservation.reservation_id}/seat`}
                       >
                         <button
-                          data-reservation-id-cancel={
-                            reservation.reservation_id
-                          }
-                          className="mx-3 btn btn-danger btn-sm"
-                          onClick={handleCancel}
-                        >
-                          Cancel
-                        </button>
-                        <button
+                          name="seat"
+                          id="seat"
                           type="button"
-                          className="btn btn-secondary ml-2"
+                          className="btn btn-primary m-2 btn=-sm"
                         >
-                          Edit
+                          Seat
                         </button>
                       </a>
-                    </div>
-                  </div>
-                  <hr />
-                </>
-              )}
+                    </>
+                  )}
+                  {reservation.status === "seated" && (
+                    <>
+                      <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={() => {
+                          if (window.confirm("Finish reservation?"))
+                            clickHandler(reservation, "finished");
+                        }}
+                      >
+                        Finish
+                      </button>
+                    </>
+                  )}
+                  {reservation.status !== "cancelled" && (
+                    <button
+                      data-reservation-id-cancel={reservation.reservation_id}
+                      className="m-2 btn btn-danger btn-sm"
+                      onClick={() => handleCancel(reservation)}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <a href={`/reservations/${reservation.reservation_id}/edit`}>
+                    <button
+                      type="button"
+                      className="btn btn-secondary m-2 btn=-sm"
+                    >
+                      Edit
+                    </button>
+                  </a>
+                </div>
+              </div>
+              <hr />
             </div>
           ))}
         </div>
